@@ -41,10 +41,10 @@ public final class StreamTestDriver {
      */
     @Test
     public void testname() throws Exception {
-        final String username = System.getProperty("gnip.username");
-        final String password = System.getProperty("gnip.password");
-        final String account = System.getProperty("gnip.account");
-        final String streamName = System.getProperty("gnip.stream");
+        final String username = System.getenv("gnip.username");
+        final String password = System.getenv("gnip.password");
+        final String account = System.getenv("gnip.account");
+        final String streamName = System.getenv("gnip.stream");
         
         if(username == null) {
             throw new IllegalArgumentException("Missing gnip.username");

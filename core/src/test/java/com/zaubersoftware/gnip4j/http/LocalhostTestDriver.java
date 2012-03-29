@@ -45,7 +45,7 @@ public final class LocalhostTestDriver {
 
                 @Override
                 public URI createStreamUri(final String domain, final String streamName) {
-                    return URI.create("http://localhost:8080");
+                    return URI.create("http://localhost:8081/");
                 }
 
                 @Override
