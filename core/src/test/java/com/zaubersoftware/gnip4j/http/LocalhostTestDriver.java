@@ -18,6 +18,8 @@ package com.zaubersoftware.gnip4j.http;
 import java.net.URI;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import net.sf.staccatocommons.defs.Executable;
+
 import org.junit.Test;
 
 import com.zaubersoftware.gnip4j.api.GnipFacade;
@@ -80,4 +82,47 @@ public final class LocalhostTestDriver {
             t.printStackTrace();
         }
     }
+    
+    
+    @Test
+    public void testMonad() throws Exception {
+        try {
+            final UriStrategy uriStrategy = new UriStrategy() {
+
+                @Override
+                public URI createStreamUri(final String domain, final String streamName) {
+                    return URI.create("http://localhost:8080");
+                }
+
+                @Override
+                public URI createRulesUri(final String domain, final String streamName) {
+                    return null;
+                }
+            };
+            final JRERemoteResourceProvider resourceProvider = new JRERemoteResourceProvider(
+                    new ImmutableGnipAuthentication("foo", "bar"));
+            final GnipFacade gnip = new DefaultGnipFacade(resourceProvider, uriStrategy);
+
+            System.out.println("-- Creating stream");
+            final AtomicInteger counter = new AtomicInteger();
+            GnipMonads.fromActivity(gnip, "test-account", "test-stream").each(new Executable<Activity>() {
+                public void exec(Activity activity) {
+                    final int i = counter.getAndIncrement();
+//                    TODO                      
+                    if (i >= 100000) {
+                        System.out.println("-- Closing stream.");
+                        stream.close();
+                    }
+                    System.out.println(i + "-" + activity.getBody() + " " + activity.getGnip().getMatchingRules());                    
+                }
+            }).run();
+            System.out.println("-- Awaiting for stream to terminate");
+            System.out.println("-- Shutting down");
+
+        }   catch(final Throwable t) {
+            System.out.println(t.getMessage());
+            t.printStackTrace();
+        }
+    }
+
 }

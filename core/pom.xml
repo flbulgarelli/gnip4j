@@ -38,6 +38,14 @@
 			<artifactId>commons-io</artifactId>
                         <scope>test</scope>
 		</dependency>
+
+       <dependency>
+         <groupId>net.sf.staccatocommons</groupId>
+         <artifactId>staccatissimo-control</artifactId>
+         <version>2.2-SNAPSHOT</version>
+       </dependency>
+       
+       
         <!-- BEGIN: Logging -->
         <dependency>
             <groupId>org.slf4j</groupId>
